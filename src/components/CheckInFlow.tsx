@@ -1,0 +1,198 @@
+import React, { useState } from 'react';
+import { ArrowLeft, Check, ChevronRight, ChevronLeft } from 'lucide-react';
+
+interface CheckInFlowProps {
+  onBack: () => void;
+}
+
+const CheckInFlow: React.FC<CheckInFlowProps> = ({ onBack }) => {
+  const [step, setStep] = useState(1);
+  const [reservationNumber, setReservationNumber] = useState('');
+  const [signature, setSignature] = useState('');
+
+  const nextStep = () => setStep(prev => prev + 1);
+  const prevStep = () => setStep(prev => prev - 1);
+
+  const StepIndicator = ({ currentStep }: { currentStep: number }) => (
+    <div className="flex justify-center space-x-2 mb-8">
+      {[1, 2, 3, 4].map((num) => (
+        <div
+          key={num}
+          className={`w-3 h-3 rounded-full ${
+            num === currentStep ? 'bg-sky-500' : 'bg-slate-200'
+          }`}
+        />
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-8">
+      {/* Header */}
+      <div className="max-w-4xl mx-auto mb-8 flex items-center">
+        <button 
+          onClick={onBack} 
+          className="p-4 bg-white rounded-xl shadow-md hover:bg-slate-50 flex items-center text-slate-600"
+        >
+          <ArrowLeft size={24} />
+          <span className="ml-2 text-lg">戻る</span>
+        </button>
+        <h2 className="text-2xl font-bold flex-1 text-center text-slate-900">チェックイン</h2>
+        <div className="w-24" /> {/* Spacer for alignment */}
+      </div>
+
+      {step < 5 && <StepIndicator currentStep={step} />}
+
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          {step === 1 && (
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-slate-900 text-center">予約番号を入力してください</h3>
+              <div className="max-w-lg mx-auto">
+                <input
+                  type="text"
+                  value={reservationNumber}
+                  onChange={(e) => setReservationNumber(e.target.value)}
+                  className="w-full p-4 text-2xl border-2 border-slate-200 rounded-xl focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none text-center"
+                  placeholder="予約番号"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={nextStep}
+                  className="px-8 py-4 bg-white text-sky-500 border-2 border-sky-500 rounded-xl hover:bg-sky-50 flex items-center text-xl font-medium"
+                >
+                  <span>次へ</span>
+                  <ChevronRight size={24} className="ml-2" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-slate-900 text-center">予約情報の確認</h3>
+              <div className="grid grid-cols-2 gap-6 text-lg">
+                <div className="space-y-4">
+                  <div className="bg-slate-50 p-4 rounded-lg">
+                    <p className="text-slate-600">予約番号</p>
+                    <p className="text-xl font-medium">{reservationNumber}</p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-lg">
+                    <p className="text-slate-600">お名前</p>
+                    <p className="text-xl font-medium">山田太郎</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="bg-slate-50 p-4 rounded-lg">
+                    <p className="text-slate-600">宿泊期間</p>
+                    <p className="text-xl font-medium">2024/03/20 - 2024/03/22</p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-lg">
+                    <p className="text-slate-600">部屋タイプ</p>
+                    <p className="text-xl font-medium">デラックスルーム</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={prevStep}
+                  className="px-8 py-4 bg-white text-slate-500 border-2 border-slate-300 rounded-xl hover:bg-slate-50 flex items-center text-xl font-medium"
+                >
+                  <ChevronLeft size={24} className="mr-2" />
+                  <span>戻る</span>
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-8 py-4 bg-white text-sky-500 border-2 border-sky-500 rounded-xl hover:bg-sky-50 flex items-center text-xl font-medium"
+                >
+                  <span>確認</span>
+                  <ChevronRight size={24} className="ml-2" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-slate-900 text-center">署名をお願いします</h3>
+              <div className="max-w-lg mx-auto">
+                <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-4 h-48 mb-4">
+                  {/* Signature canvas will be implemented here */}
+                </div>
+                <p className="text-center text-slate-600 text-sm">
+                  上記のエリアにタッチして署名してください
+                </p>
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={prevStep}
+                  className="px-8 py-4 bg-white text-slate-500 border-2 border-slate-300 rounded-xl hover:bg-slate-50 flex items-center text-xl font-medium"
+                >
+                  <ChevronLeft size={24} className="mr-2" />
+                  <span>戻る</span>
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-8 py-4 bg-white text-sky-500 border-2 border-sky-500 rounded-xl hover:bg-sky-50 flex items-center text-xl font-medium"
+                >
+                  <span>署名完了</span>
+                  <ChevronRight size={24} className="ml-2" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-slate-900 text-center">お部屋情報</h3>
+              <div className="max-w-lg mx-auto space-y-4">
+                <div className="bg-slate-50 p-6 rounded-xl text-center">
+                  <p className="text-slate-600 mb-2">部屋番号</p>
+                  <p className="text-4xl font-bold text-slate-900">501</p>
+                </div>
+                <div className="bg-slate-50 p-6 rounded-xl text-center">
+                  <p className="text-slate-600 mb-2">暗証番号</p>
+                  <p className="text-4xl font-bold text-slate-900">1234</p>
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={nextStep}
+                  className="px-8 py-4 bg-white text-emerald-500 border-2 border-emerald-500 rounded-xl hover:bg-emerald-50 flex items-center text-xl font-medium"
+                >
+                  <span>完了</span>
+                  <ChevronRight size={24} className="ml-2" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div className="text-center space-y-6 py-8">
+              <div className="text-emerald-500 flex justify-center">
+                <div className="bg-emerald-50 p-4 rounded-full">
+                  <Check size={64} />
+                </div>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">チェックイン完了</h3>
+                <p className="text-lg text-slate-600">ごゆっくりお過ごしください</p>
+              </div>
+              <div className="pt-4">
+                <button
+                  onClick={onBack}
+                  className="px-8 py-4 bg-white text-slate-500 border-2 border-slate-300 rounded-xl hover:bg-slate-50 flex items-center text-xl font-medium mx-auto"
+                >
+                  <span>メインメニューへ</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CheckInFlow;
